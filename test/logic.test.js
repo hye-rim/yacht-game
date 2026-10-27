@@ -160,15 +160,15 @@ test('hard ai goes for the yacht and finishes straights', () => {
   const st = L.newGame();
   L.rollDice(st, L.rng(3));
   st.dice = [4, 4, 4, 4, 2]; st.rollsLeft = 2;
-  const a = L.aiPick(st, 'hard');
+  const a = L.aiPick(st, 'hard', () => 0.99);
   assert.strictEqual(a.type, 'roll');
   assert.deepStrictEqual(a.hold, [true, true, true, true, false]);
   st.dice = [1, 2, 3, 4, 5]; st.rollsLeft = 2;
-  const b = L.aiPick(st, 'hard');
+  const b = L.aiPick(st, 'hard', () => 0.99);
   assert.strictEqual(b.type, 'score');
   assert.strictEqual(b.cat, 10);                         // large straight
   st.dice = [6, 6, 6, 6, 6]; st.rollsLeft = 1;
-  assert.deepStrictEqual(L.aiPick(st, 'hard'), { type: 'score', cat: 11 });
+  assert.deepStrictEqual(L.aiPick(st, 'hard', () => 0.99), { type: 'score', cat: 11 });
 });
 
 test('hard ai decision is fast', () => {
@@ -176,7 +176,7 @@ test('hard ai decision is fast', () => {
   L.rollDice(st, L.rng(9));
   st.dice = [1, 3, 3, 5, 6]; st.rollsLeft = 2;
   const t = Date.now();
-  L.aiPick(st, 'hard');
+  L.aiPick(st, 'hard', () => 0.99);
   assert.ok(Date.now() - t < 1500, 'too slow: ' + (Date.now() - t));
 });
 

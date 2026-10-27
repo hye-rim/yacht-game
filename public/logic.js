@@ -240,12 +240,14 @@ function maskFor(dice, keep) {
 }
 
 // 돌려주는 값: { type: 'roll', hold: [bool x5] } 또는 { type: 'score', cat }
+// 어려움도 사람처럼 가끔(HARD_SLIP) 쉬움처럼 둔다: 계산이 완벽하면 사람이 이기기 어렵다
+const HARD_SLIP = 0.2;
 function aiPick(st, level = 'easy', rand = Math.random) {
   const p = st.turn;
   const open = openCats(st, p);
   if (!rolled(st)) return { type: 'roll', hold: [false, false, false, false, false] };
   const counts = countsOf(st.dice);
-  if (level === 'hard') {
+  if (level === 'hard' && rand() >= HARD_SLIP) {
     const r = searchHard(counts, st.rollsLeft, open, upperSum(st.cards[p]));
     if (r.keep) return { type: 'roll', hold: maskFor(st.dice, r.keep) };
     return { type: 'score', cat: r.cat };
